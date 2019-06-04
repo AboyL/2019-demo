@@ -6,3 +6,6 @@
 https://www.jianshu.com/p/d4a3fa0ca029
 
 
+2、image-compress
+1、进入到serve目录 node index.js启动服务端
+2、进入到image-upload目录 yarn serve启动客户端
