@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Progress :completeness="0.5"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Progress from './components/Progress.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Progress
   }
 }
 </script>
