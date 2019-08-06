@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Progress :completeness="0.5"/>
+    <Progress :progress="0.8"/>
   </div>
 </template>
 
