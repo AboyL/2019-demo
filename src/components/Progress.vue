@@ -19,13 +19,21 @@
       :cx="option.cx"
       :cy="option.cy"
       :stroke="item.color"
-      :stroke-dasharray="item.arcLength"
       :stroke-width="option.strokeWidth"
       fill="none"
       transform="rotate(-90)"
       transform-origin="center"
       stroke-linecap="round"
-    />
+    >
+      <animate
+        :to="item.arcLength"
+        begin="0s"
+        :dur="option.durtion"
+        from="0,1000000"
+        attributeName="stroke-dasharray"
+        fill="freeze"
+      />
+    </circle>
   </svg>
 </template>
 <script>
@@ -66,7 +74,7 @@ export default {
       let colorArr = gradientColor(this.option.startColor, this.option.endColor, step)
       // 计算每个步进中的弧长
       let arcLengthArr = colorArr.map((color, index) => ({
-        arcLength: `${index * (progressLength / 100)},100000000`,
+        arcLength: `${index * (progressLength / step)},100000000`,
         color: color
       }))
       arcLengthArr.reverse()
@@ -80,6 +88,7 @@ export default {
         backColor: '#E6E6E6',
         startColor: [249, 221, 180],
         endColor: [238, 171, 86], // 用于渐变色的开始
+        durtion: '1s'
       }
       Object.assign(baseOption, this.progressOption)
       // 中心位置自动生成
