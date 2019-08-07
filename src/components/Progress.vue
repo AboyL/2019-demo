@@ -53,7 +53,7 @@ export default {
     arcArr () {
       let circleLength = Math.floor(2 * Math.PI * this.option.radius)
       let progressLength = this.progress * circleLength
-      const step = 100 // 设置到100则已经比较难看出来颜色断层
+      const step = this.option.step // 设置到100则已经比较难看出来颜色断层
       const gradientColor = (startRGB, endRGB, step) => {
         let startR = startRGB[0]
         let startG = startRGB[1]
@@ -88,7 +88,8 @@ export default {
         backColor: '#E6E6E6',
         startColor: [249, 221, 180],
         endColor: [238, 171, 86], // 用于渐变色的开始
-        durtion: '1s'
+        durtion: '1s',
+        step: 100,
       }
       Object.assign(baseOption, this.progressOption)
       // 中心位置自动生成
