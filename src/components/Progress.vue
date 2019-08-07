@@ -4,6 +4,18 @@
     :width="option.size"
     x-mlns="http://www.w3.org/200/svg"
   >
+    <defs>
+      <linearGradient id="gradient">
+        <stop
+          offset="0%"
+          style="stop-color: green;"
+        />
+        <stop
+          offset="100%"
+          style="stop-color: yellow"
+        />
+      </linearGradient>
+    </defs>
     <circle
       :r="option.radius"
       :cx="option.cx"
@@ -16,7 +28,7 @@
       :r="option.radius"
       :cx="option.cx"
       :cy="option.cy"
-      :stroke="option.progressColor"
+      :stroke="'url(#gradient)'"
       :stroke-dasharray="arcLength"
       :stroke-width="option.strokeWidth"
       fill="none"
