@@ -32,6 +32,7 @@
       "eslint:recommended"
     ],
     "rules": {
+      "no-console":0,
       "vue/max-attributes-per-line": ["error", {
         "singleline": 4,
         "multiline": {
