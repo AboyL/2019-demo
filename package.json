@@ -34,7 +34,7 @@
     "rules": {
       "no-console":0,
       "vue/max-attributes-per-line": ["error", {
-        "singleline": 4,
+        "singleline": 5,
         "multiline": {
           "max": 1,
           "allowFirstLine": false

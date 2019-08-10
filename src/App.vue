@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <Progress :progress="0.8"/>
+    <!-- <Progress :progress="0.8"/> -->
+    <Progress2 :progress="1"/>
   </div>
 </template>
 
 <script>
-import Progress from './components/Progress.vue'
+// import Progress from './components/Progress.vue'
+import Progress2 from './components/Progress2.vue'
 
 export default {
   name: 'app',
   components: {
-    Progress
+    // Progress,
+    Progress2
   }
 }
 </script>
