@@ -87,7 +87,7 @@ export default {
         strokeWidth: 20,
         backColor: '#E6E6E6',
         startColor: [249, 221, 180],
-        endColor: [238, 171, 86], // 用于渐变色的开始
+        endColor: [238, 171, 86],
         durtion: '1s',
         step: 100,
       }

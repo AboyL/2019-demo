@@ -19,7 +19,6 @@
       fill="none"
     />
     <circle
-      id="out"
       :r="option.radius"
       :cx="option.cx"
       :cy="option.cy"
@@ -111,8 +110,8 @@ export default {
         radius: 100,
         strokeWidth: 20,
         backColor: '#E6E6E6',
-        endColor: [0, 0, 0],
-        startColor: [255, 255, 255], // 用于渐变色的开始
+        startColor: [249, 221, 180],
+        endColor: [238, 171, 86],
         durtion: '1s',
         step: 100,
       }

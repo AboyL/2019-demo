@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Progress :progress="1"/>
-    <Progress2 :progress="1"/>
+    <Progress :progress="0.6"/>
+    <Progress2 :progress="0.6"/>
   </div>
 </template>
 
