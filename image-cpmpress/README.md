@@ -4,6 +4,7 @@
 怎么比较好的处理移动端webview中点击输入框聚焦的问题
 文章链接
 https://www.jianshu.com/p/d4a3fa0ca029
+<<<<<<< HEAD:README.md
 
 
 ## image-compress
@@ -23,3 +24,5 @@ https://www.jianshu.com/p/d4a3fa0ca029
 [简书](https://www.jianshu.com/p/bfa223894867)
 
 [掘金](https://juejin.im/post/5d4af4c5f265da03a715bdf6)
+=======
+>>>>>>> image-compress:image-cpmpress/README.md
