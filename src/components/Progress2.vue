@@ -33,7 +33,7 @@
     >
       <animate
         :to="`${arcOption.innerArcLength},1000000`"
-        :begin="arcOption.innerDurtion"
+        :begin="arcOption.outDurtion"
         :dur="arcOption.innerDurtion"
         :from="`${arcOption.innerInitArcLength},1000000`"
         attributeName="stroke-dasharray"
@@ -81,20 +81,22 @@ export default {
       let arcConfig = {}
       let circleLength = Math.floor(2 * Math.PI * this.option.radius)
       // 如果此时小于0.5 则只需要显示最外层的圆弧 里面的圆弧不需要画了
-
+      // 时间计算 因为第二段的长度不见得等于第一段 所以不能平分时间 不然会导致第二端的速度出现骤降
+      // 因此需要按照比例进行时间计算
       if (this.progress < 0.5) {
         arcConfig.outArcLength = this.progress * circleLength
-        // arcConfig.outDurtion = this.option.durtion.split('s')[0] / 2 + 's' // 为初始设置的动画值
         arcConfig.outDurtion = this.option.durtion // 为初始设置的动画值
         arcConfig.innerArcLength = 0
         arcConfig.innerInitArcLength = 0 // 为动画做准备
         arcConfig.innerDurtion = 0
       } else {
+
+        const time = this.option.durtion.split('s')[0]
         arcConfig.outArcLength = 0.5 * circleLength
-        arcConfig.outDurtion = this.option.durtion.split('s')[0] / 2 + 's' // 为初始设置的动画值的一半
+        arcConfig.outDurtion = (0.5 / this.progress) * time + 's' // 
         arcConfig.innerArcLength = this.progress * circleLength
         arcConfig.innerInitArcLength = 0.5 * circleLength // 为动画做准备 此时从中间开始
-        arcConfig.innerDurtion = arcConfig.outDurtion // 为动画做准备 此时从中间开始
+        arcConfig.innerDurtion = ((this.progress - 0.5) / this.progress) * time + 's' // 为动画做准备 此时从中间开始
       }
       const tansfromColor = arr => `rgb(${arr[0]},${arr[1]},${arr[2]})`
       arcConfig.outArcStartColor = tansfromColor(this.option.startColor)
@@ -111,7 +113,7 @@ export default {
         backColor: '#E6E6E6',
         endColor: [0, 0, 0],
         startColor: [255, 255, 255], // 用于渐变色的开始
-        durtion: '3s',
+        durtion: '1s',
         step: 100,
       }
       Object.assign(baseOption, this.progressOption)
