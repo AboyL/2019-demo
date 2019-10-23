@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用普通的方式完成时间感觉</title>
+  <script src="https://cdn.bootcss.com/rxjs/6.5.2/rxjs.umd.js"></script>
+</head>
+
+<body>
+  <!-- 点击按钮 然后在3s后松开测试对时间的感觉 -->
+  <h3>点击按钮 然后在3s后松开测试对时间的感觉</h3>
+  <button id="btn">按钮</button>
+  <button id="btn-rx">按钮rx</button>
+  <!-- 点击按钮以后松开的世界 -->
+  <div id="time"></div>
+  <script>
+    // 为按钮绑定上函数
+    let startTime
+    document.getElementById('btn').onmousedown = () => {
+      startTime = Date.now()
+    }
+    document.getElementById('btn').onmouseup = () => {
+      if (startTime) {
+        document.getElementById('time').innerText = Date.now() - startTime + 'ms'
+        startTime = null
+      }
+    }
+    
+    // 使用rxjs完成
+    rxjs.fromEvent(document.getElementById('btn-rx'), 'mouseup')
+      .pipe(
+        rxjs.operators.timestamp(),
+        rxjs.operators.withLatestFrom(
+          rxjs.fromEvent(document.getElementById('btn-rx'), 'mousedown').pipe(
+            rxjs.operators.timestamp(),
+          ),
+          (up, down) => {
+            return up.timestamp - down.timestamp
+          }
+        ),
+      )
+      .subscribe((e) => {
+        document.getElementById('time').innerText = e + 'ms'
+      })
+  </script>
+</body>
+
+</html>
