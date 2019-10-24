@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.bootcss.com/rxjs/6.5.2/rxjs.umd.js"></script>
+</head>
+
+<body>
+  <script>
+    console.log('of')
+    rxjs.of(1, 2, 3).subscribe(e => console.log(e))
+    console.log('range')
+    rxjs.range(1, 5).subscribe(e => console.log(e))
+    console.log('generate')
+    rxjs.generate(
+      1,
+      x => x < 9,
+      x => x + 5
+    ).subscribe(e => console.log(e))
+    console.log('repeat')
+    // Returns an Observable that will resubscribe to the source stream when the source stream completes, at most count times.
+    // 必须要等到结束以后才会进行重复 对于永不结束的流来说么有意义
+    rxjs.of(1, 2, 3).subscribe(e => console.log(e))
+    rxjs.of(1, 2, 3).pipe(
+      rxjs.operators.repeat(3)
+    ).subscribe(e => console.log(e))
+    rxjs.interval(100).pipe(
+      rxjs.operators.take(3),
+      rxjs.operators.repeat(3)
+    ).subscribe(e => console.log(e), e => console.log('err', e), e => console.log('com', e))
+    console.log('timer')
+    rxjs.timer(1000).subscribe(e => console.log(e))
+    rxjs.timer(500, 1000).pipe(rxjs.operators.take(3)).subscribe(e => console.log(e))
+    console.log('from')
+    const getPromise = () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(1000)
+        }, 1000);
+      });
+    }
+    rxjs.from(getPromise()).subscribe(e=>console.log('p'))
+  </script>
+</body>
+
+</html>
