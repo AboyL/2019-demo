@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>合并类操作符</title>
+  <script src="https://cdn.bootcss.com/rxjs/6.5.2/rxjs.umd.js"></script>
+</head>
+
+<body>
+  <script>
+    // // 如何对多条数据流进行合并 得到新的数据流
+    // console.log('concat')
+    // // concat必须等到一个数据流完结才会进行合并
+    // rxjs.concat(
+    //   rxjs.interval(1000)
+    //     .pipe(
+    //       rxjs.operators.take(3)
+    //     ),
+    //   rxjs.timer(500, 1000)
+    //     .pipe(
+    //       rxjs.operators.mapTo('zz'),
+    //       rxjs.operators.take(3)
+    //     ),
+    // )
+    //   .subscribe(
+    //     e => console.log('concat   ', e)
+    //   )
+
+
+
+    // console.log('merge')
+    // // 而merge则是先到先得
+    // // 避免使用merge去merge同步数据流
+    // // merge最后一个参数可以是一个数字 这数字表示 当前最多只能有几条流进行合并
+    // // 永远不会打出 zzzz
+    // rxjs.merge(
+    //   rxjs.interval(1000),
+    //   rxjs.timer(500, 1000)
+    //     .pipe(
+    //       rxjs.operators.mapTo('zz'),
+    //     ),
+    //   rxjs.timer(300, 1000)
+    //     .pipe(
+    //       rxjs.operators.mapTo('zzzz'),
+    //     ),
+    //   2
+    // )
+    //   .pipe(
+    //     rxjs.operators.take(3)
+    //   )
+    //   .subscribe(
+    //     e => console.log('merge   ', e)
+    //   )
+
+    // console.log('zip')
+    // // 而zip永远是11对应的
+    // // 有任何一个流完结就完结
+    // rxjs.zip(
+    //   rxjs.interval(10).pipe(
+    //     rxjs.operators.take(3)
+    //   ),
+    //   rxjs.interval(100)
+    //     .pipe(
+    //       rxjs.operators.mapTo('zz'),
+    //     ),
+    //   rxjs.interval(300)
+    //     .pipe(
+    //       rxjs.operators.mapTo('3zz'),
+    //     ),
+    // )
+    //   .subscribe(
+    //     e => console.log('zip   ', e),
+    //     null,
+    //     e => console.log('com', e)
+    //   )
+
+    // console.log('combineLatest')
+    // zip不会重用一个数据 而combineLatest会
+    // 会在所有的流都完结的时候完结
+    // 存在glitch问题
+    // 什么是glitch问题 加入要合并的数据来自同一个数据源头 但是因为异步操作本身的原因 即使是看起来同步的操作也会变成异步
+    // rxjs.combineLatest(
+    //   rxjs.interval(10).pipe(
+    //     rxjs.operators.take(3)
+    //   ),
+    //   rxjs.interval(100)
+    //     .pipe(
+    //       rxjs.operators.map(e => e + ' zz'),
+    //       rxjs.operators.take(3)
+    //     ),
+    //   rxjs.interval(300)
+    //     .pipe(
+    //       rxjs.operators.map(e => e + ' 3zz'),
+    //       rxjs.operators.take(3)
+    //     ),
+    //   (...arr) => arr.join('-')
+    // )
+    //   .subscribe(
+    //     e => console.log('combineLatest   ', e),
+    //     null,
+    //     e => console.log('com', e)
+    //   )
+
+    // const i$ = rxjs.interval(100)
+    // rxjs.combineLatest(
+    //   i$.pipe(rxjs.operators.map(e => 'a' + e)),
+    //   i$.pipe(rxjs.operators.map(e => 'b' + e)),
+    // ).pipe(rxjs.operators.take(3))
+    //   .subscribe(
+    //     e => console.log('combineLatest   ', e),
+    //     null,
+    //     e => console.log('com', e)
+    //   )
+
+    // withLatestFrom
+    // withLatestFrom只有实例操作符的形式
+    // 而且所有输入Observable的地位并不相同
+    // 调用withLatestFrom的那个Observable对象起到主导数据产生节奏的作用
+    // 作为参数的Observable对象只能贡献数据，不能控制产生数据的时机
+    // Combines the source Observable with other Observables to create an Observable whose values are calculated from the latest values of each
+    //  only when the source emits
+    // 这个句官方上的解释的意思是说 只有在上流的数据产生后产生的新的数据 才会算数
+    // 下游的observable的数据只根据一个上游产生,这样就解决了glitch的问题 只有在上游的数据产生后 其他数据产生的数据才会算数
+    // 只有当输入的数据流存在依赖关系 也就是存在多个数据流的源头是来自一个数据流的时候 就会产生问题
+    // console.log('withLatestFrom')
+    // const i$ = rxjs.interval(100)
+    // i$.pipe(rxjs.operators.map(e => 'a' + e)).pipe(
+    //   rxjs.operators.withLatestFrom(
+    //     i$.pipe(rxjs.operators.map(e => 'b' + e)),
+    //   )
+    // ).pipe(rxjs.operators.take(3))
+    //   .subscribe(
+    //     e => console.log('withLatestFrom   ', e),
+    //     null,
+    //     e => console.log('com', e)
+    //   )
+
+    // console.log('race')
+    // // 只会输出第一个流的 因为他是最先产生数据的流
+    // rxjs.race(
+    //   rxjs.interval(1000).pipe(
+    //     rxjs.operators.mapTo('x')
+    //   ),
+    //   rxjs.interval(1500).pipe(
+    //     rxjs.operators.mapTo('y')
+    //   )
+    // ).subscribe(e => console.log(e))
+
+    console.log('forkJoin')
+    // 只会输出一个数据 需要等到所有的流都结束的时候输出 输出所有的流的最后的小程序
+    // 可以认为forkJoin就是rxjs的promiseAll
+    rxjs.forkJoin(
+      rxjs.interval(100).pipe(
+        rxjs.operators.map(e => e + 'x'),
+        rxjs.operators.take(2)
+      ),
+      rxjs.interval(150).pipe(
+        rxjs.operators.map(e => e + 'x'),
+        rxjs.operators.take(3)
+      )
+    ).subscribe(e => console.log(e))
+  </script>
+</body>
+
+</html>
