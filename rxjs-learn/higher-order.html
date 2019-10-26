@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>高阶obserable</title>
+  <script src="https://cdn.bootcss.com/rxjs/6.5.2/rxjs.umd.js"></script>
+</head>
+
+<body>
+  <script>
+    /**
+      什么是高阶的obserable
+      跟高阶函数一个概念 产生函数的函数称为高阶obserable
+      产生observerable的ob就是高阶
+      也就是返回的数据都是observable
+    */
+    // 如何生成一个高阶observable
+    const ho$ = rxjs.interval(500).pipe(
+      rxjs.operators.take(2),
+      rxjs.operators.map(x => rxjs.interval(1000).pipe(
+        rxjs.operators.map(y => x + ':' + y),
+        rxjs.operators.take(2),
+      ))
+    )
+    // 对于这个ho$我们如果是平常的subscribe 最后会得到ob对象
+    // ho$.subscribe((e) => console.log('ho ', e))
+
+    // 使用concatAll
+    // ho$.pipe(
+    //   rxjs.operators.concatAll()
+    // ).subscribe((e) => console.log('ho ', e))
+
+    // console.log('mergeAll');
+    // ho$.pipe(
+    //   rxjs.operators.mergeAll()
+    // ).subscribe((e) => console.log('ho ', e))
+
+    // console.log('zipAll');
+    // ho$.pipe(
+    //   rxjs.operators.zipAll()
+    // ).subscribe((e) => console.log('ho ', e))
+
+    // console.log('combineAll');
+    // ho$.pipe(
+    //   rxjs.operators.combineAll()
+    // ).subscribe((e) => console.log('ho ', e))
+
+    // 以上的三个操作符我们可以很简单的就发现跟前面的是一一对应的关系
+
+    // switch 是因为每个流不见得会在同时产生 
+    // 当有新的流产生的时候 就完全使用新流的数据
+    // console.log('switch');
+    // ho$.pipe(
+    //   rxjs.operators.switchAll()
+    // ).subscribe((e) => console.log('ho ', e))
+
+
+    // 耗尽
+    // 如果前一个observable对象还没完结 后一个observable对象就已经产生 那么他所有的数据都会被抛弃
+    console.log('exhaust');
+    ho$.pipe(
+      rxjs.operators.exhaust()
+    ).subscribe((e) => console.log('ho ', e))
+
+  </script>
+</body>
+
+</html>

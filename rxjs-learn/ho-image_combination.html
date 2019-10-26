@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>对图片合成使用高阶的obserable</title>
+  <script src="https://cdn.bootcss.com/rxjs/6.5.2/rxjs.umd.js"></script>
+</head>
+
+<body>
+  <canvas id="combination"></canvas>
+  <a download id="download">下载</a>
+  <script>
+    const src0 = 'http://img5.imgtn.bdimg.com/it/u=3108685336,1951350863&fm=26&gp=0.jpg'
+    const src1 = 'http://img5.imgtn.bdimg.com/it/u=2221756694,2517784243&fm=26&gp=0.jpg'
+    const img0 = new Image()
+    const img1 = new Image()
+    img0.src = src0
+    img1.src = src1
+    // 当两张图都加载好了的时候进行canvas设置
+    const img0Load$ = rxjs.fromEvent(img0, 'load')
+    const img1Load$ = rxjs.fromEvent(img1, 'load')
+    rxjs.zip(img0Load$, img1Load$)
+      .pipe(
+        rxjs.operators.map(([e0, e1]) => {
+          console.log(e0);
+          const img0 = e0.path[0]
+          const img1 = e1.path[0]
+          const imgSrc0 = img0.currentSrc
+          const imgSrc1 = img1.currentSrc
+          const img0Width = img0.naturalWidth
+          const img1Width = img1.naturalWidth
+          const img0Height = img0.naturalHeight
+          const img1Height = img1.naturalHeight
+          const minWidth = Math.min(img0Width, img1Width)
+          const maxWidth = Math.max(img0Width, img1Width)
+          const minHeight = Math.min(img0Height, img1Height)
+          const maxHeight = Math.max(img0Height, img1Height)
+          const canvas = document.getElementById('combination')
+          canvas.width = maxWidth
+          canvas.height = maxHeight
+          const ctx = canvas.getContext('2d')
+          let background = new Image()
+          let minImage = new Image()
+          // 如果不设置会导致报错
+          // Tainted canvases may not be exported
+          // https://stackoverflow.com/questions/22710627/tainted-canvases-may-not-be-exported
+          background.setAttribute('crossOrigin', 'anonymous')
+          minImage.setAttribute('crossOrigin', 'anonymous')
+          if (maxHeight === img0Height) {
+            background.src = imgSrc0
+            minImage.src = imgSrc1
+          } else {
+            background.src = imgSrc1
+            minImage.src = imgSrc0
+          }
+          return rxjs.zip(rxjs.fromEvent(background, 'load'), rxjs.fromEvent(minImage, 'load')).pipe(
+            rxjs.operators.map(() => {
+              // 绘制背景
+              ctx.drawImage(background, 0, 0, maxWidth, maxHeight)
+              // 绘制小图
+              ctx.drawImage(minImage, maxWidth - minWidth, maxHeight - minHeight, minWidth, minHeight);
+              const downloadImageSrc = canvas.toDataURL("image/png")
+              return downloadImageSrc
+            })
+          )
+        })
+      )
+      .pipe(
+        rxjs.operators.concatAll()
+      )
+      .subscribe((downloadImageSrc) => {
+        document.getElementById('download').href = downloadImageSrc
+      })
+  </script>
+</body>
+
+</html>
