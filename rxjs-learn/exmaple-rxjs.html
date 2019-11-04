@@ -12,13 +12,22 @@
 
 <body>
   <input type="text" id="input-test">
+  <input type="text" id="input-test2">
   <script>
     const interval = 300
-    rxjs.fromEvent(
-      document.getElementById('input-test'), 'input'
-    ).pipe(
+    const operatorList = [
       rxjs.operators.map(e => e.target.value),
       rxjs.operators.debounceTime(interval),
+    ]
+    rxjs.combineLatest(
+      rxjs.fromEvent(
+        document.getElementById('input-test'), 'input'
+      ).pipe(...operatorList),
+      rxjs.fromEvent(
+        document.getElementById('input-test2'), 'input'
+      ).pipe(...operatorList),
+    ).pipe(
+      rxjs.operators.map(arr => arr.join('/')),
     )
       .subscribe(e => console.log(e))
   </script>

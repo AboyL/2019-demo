@@ -12,17 +12,31 @@
 
 <body>
   <input type="text" id="input-test">
+  <input type="text" id="input-test2">
   <script>
-    let time = null
+    let time = [0, 0]
     const interval = 300
+    const flagArr = [false, false]
+    let valueArr = ['', '']
+    const print = (index, e) => {
+      time[index] = Date.now()
+      setTimeout(() => {
+        if (Date.now() - time[index] > interval) {
+          flagArr[index] = true
+          valueArr[index] = e.target.value
+          if (flagArr.every(v => v)) {
+            console.log(valueArr.join('/'));
+          }
+        }
+      }, interval);
+    }
     document.getElementById('input-test')
       .addEventListener('input', (e) => {
-        time = Date.now()
-        setTimeout(() => {
-          if (Date.now() - time > interval) {
-            console.log(e.target.value)
-          }
-        }, interval);
+        print(0, e)
+      })
+    document.getElementById('input-test2')
+      .addEventListener('input', (e) => {
+        print(1, e)
       })
   </script>
 </body>
