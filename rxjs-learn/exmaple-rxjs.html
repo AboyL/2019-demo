@@ -13,10 +13,14 @@
 <body>
   <input type="text" id="input-test">
   <script>
+    const interval = 300
     rxjs.fromEvent(
       document.getElementById('input-test'), 'input'
+    ).pipe(
+      rxjs.operators.map(e => e.target.value),
+      rxjs.operators.debounceTime(interval),
     )
-      .subscribe(e => console.log(e.target.value))
+      .subscribe(e => console.log(e))
   </script>
 </body>
 

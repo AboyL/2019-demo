@@ -6,15 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>原生实现对比例子</title>
+  <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.core.js">
+  </script>
 </head>
 
 <body>
   <input type="text" id="input-test">
   <script>
+    let time = null
+    const interval = 300
     document.getElementById('input-test')
-    .addEventListener('input', (e) => {
-      console.log(e.target.value)
-    })
+      .addEventListener('input', (e) => {
+        time = Date.now()
+        setTimeout(() => {
+          if (Date.now() - time > interval) {
+            console.log(e.target.value)
+          }
+        }, interval);
+      })
   </script>
 </body>
+
 </html>
