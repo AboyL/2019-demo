@@ -13,23 +13,41 @@
 <body>
   <input type="text" id="input-test">
   <input type="text" id="input-test2">
+  <div id="text"></div>
   <script>
     let time = [0, 0]
-    const interval = 300
+    const interval = 50
     const flagArr = [false, false]
     let valueArr = ['', '']
-    const print = (index, e) => {
+    let promiseFlag = 0
+    const getData = (v) => {
+      return new Promise((resolve, reject) => {
+        const t = Math.random() * 3000
+        console.log(t)
+        setTimeout(() => {
+          resolve(v + 'test')
+        }, t);
+      });
+    }
+
+    const print = async (index, e) => {
       time[index] = Date.now()
-      setTimeout(() => {
+      ++promiseFlag
+      let currentPromise = promiseFlag
+      setTimeout(async () => {
         if (Date.now() - time[index] > interval) {
           flagArr[index] = true
           valueArr[index] = e.target.value
           if (flagArr.every(v => v)) {
-            console.log(valueArr.join('/'));
+            const v = await getData(valueArr.join('/'))
+            if (promiseFlag === currentPromise) {
+              document.getElementById('text').innerHTML = v
+            }
           }
         }
       }, interval);
     }
+
     document.getElementById('input-test')
       .addEventListener('input', (e) => {
         print(0, e)
