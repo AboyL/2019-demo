@@ -31,3 +31,5 @@ https://www.jianshu.com/p/d4a3fa0ca029
 (文章地址)[https://www.jianshu.com/p/010efdce8ac2]
 
 ## [RxJS简易入门](https://www.jianshu.com/p/d5a568889cad)
+
+## [如何编写一个gulp插件](https://www.jianshu.com/p/28c11df66532)

@@ -66,5 +66,8 @@
       "**/tmp": true,
       "**/dist/":true,
       "static/":true,
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   } // 两个选择器中是否换行
 }

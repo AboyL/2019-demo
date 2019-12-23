@@ -1,0 +1,12 @@
+{
+  "name": "gulp-plugin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-util": "^3.0.8",
+    "plugin-error": "^1.0.1",
+    "through2": "^3.0.1"
+  }
+}
